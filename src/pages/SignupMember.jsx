@@ -84,13 +84,13 @@ const SignupMember = () => {
         {/* Section 1: Account Info */}
         <div>
           <h3 className="text-xl font-semibold text-[#001A78] mb-4">
-            Account Info
+            Account Info <span className="text-red-600">*</span>
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="email"
               name="eduEmail"
-              placeholder="Edu email / AMSA email"
+              placeholder="Edu email / AMSA email *"
               onChange={handleChange}
               className="input"
               required
@@ -98,7 +98,7 @@ const SignupMember = () => {
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Password *"
               onChange={handleChange}
               className="input"
               required
@@ -109,37 +109,33 @@ const SignupMember = () => {
         {/* Section 2: Personal Info */}
         <div>
           <h3 className="text-xl font-semibold text-[#001A78] mb-4">
-            Personal Info
+            Personal Info (Optional)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               name="firstName"
-              placeholder="First Name"
+              placeholder="First Name (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="lastName"
-              placeholder="Last Name"
+              placeholder="Last Name (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="personalEmail"
               type="email"
-              placeholder="Personal Email"
+              placeholder="Personal Email (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="phone"
-              placeholder="Phone"
+              placeholder="Phone (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="birthDate"
@@ -147,41 +143,36 @@ const SignupMember = () => {
               placeholder="Birth Date"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="address1"
-              placeholder="Address 1"
+              placeholder="Address 1 (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="address2"
-              placeholder="Address 2"
+              placeholder="Address 2 (optional)"
               onChange={handleChange}
               className="input"
             />
             <input
               name="city"
-              placeholder="City"
+              placeholder="City (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="state"
-              placeholder="State"
+              placeholder="State (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="zip"
-              placeholder="ZIP Code"
+              placeholder="ZIP Code (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
           </div>
         </div>
@@ -189,61 +180,54 @@ const SignupMember = () => {
         {/* Section 3: School Info */}
         <div>
           <h3 className="text-xl font-semibold text-[#001A78] mb-4">
-            School Info
+            School Info (Optional)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               name="schoolName"
-              placeholder="School Name"
+              placeholder="School Name (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="schoolCity"
-              placeholder="School City"
+              placeholder="School City (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="schoolState"
-              placeholder="School State"
+              placeholder="School State (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="degree"
-              placeholder="Pursuing Degree"
+              placeholder="Pursuing Degree (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="gradYear"
-              placeholder="Graduation Year"
+              placeholder="Graduation Year (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="schoolYear"
-              placeholder="School Year"
+              placeholder="School Year (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="major"
-              placeholder="Major"
+              placeholder="Major (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="secondMajor"
-              placeholder="Second Major"
+              placeholder="Second Major (optional)"
               onChange={handleChange}
               className="input"
             />
@@ -253,15 +237,14 @@ const SignupMember = () => {
         {/* Section 4: Social Info */}
         <div>
           <h3 className="text-xl font-semibold text-[#001A78] mb-4">
-            Social Info
+            Social Info (Optional)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               name="facebook"
-              placeholder="Facebook Profile Link"
+              placeholder="Facebook Profile Link (optional)"
               onChange={handleChange}
               className="input"
-              required
             />
             <input
               name="instagram"

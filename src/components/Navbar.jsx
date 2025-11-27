@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,18 +54,37 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="flex flex-col md:flex-row gap-3">
-            <Link
-              to="/signup/member"
-              className="bg-[#FFFCF3] border-2 border-[#001A78] text-[#171414] px-6 py-2 rounded-md font-semibold hover:bg-[#f4b825] transition text-center"
-            >
-              Become a Member
-            </Link>
-            <Link
-              to="/login"
-              className="border-2 border-[#001A78] text-[#001A78] px-6 py-2 rounded-md font-semibold hover:bg-[#001A78] hover:text-white transition text-center"
-            >
-              Login
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="bg-[#FFFCF3] border-2 border-[#001A78] text-[#171414] px-6 py-2 rounded-md font-semibold hover:bg-[#f4b825] transition text-center"
+                >
+                  My Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="border-2 border-[#C51230] text-[#C51230] px-6 py-2 rounded-md font-semibold hover:bg-[#C51230] hover:text-white transition text-center"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signup/member"
+                  className="bg-[#FFFCF3] border-2 border-[#001A78] text-[#171414] px-6 py-2 rounded-md font-semibold hover:bg-[#f4b825] transition text-center"
+                >
+                  Become a Member
+                </Link>
+                <Link
+                  to="/login"
+                  className="border-2 border-[#001A78] text-[#001A78] px-6 py-2 rounded-md font-semibold hover:bg-[#001A78] hover:text-white transition text-center"
+                >
+                  Login
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       </div>

@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage";
 import WelcomePage from "./pages/WelcomePage";
 import AdminPage from "./pages/AdminPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/signup/member" element={<SignupMember />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
       </Routes>

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function ProfilePage() {
-  const { user, authFetch, loading: authLoading } = useAuth();
+  const { user, authFetch, loading: authLoading, logout } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,6 +17,8 @@ export default function ProfilePage() {
     newPassword: "",
     confirmPassword: ""
   });
+  const [deletePassword, setDeletePassword] = useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -34,13 +36,30 @@ export default function ProfilePage() {
     try {
       setLoading(true);
       const data = await authFetch("/api/profile");
-      setProfile(data.profile);
-      setFormData(data.profile);
+      setProfile(data.user || data.profile); // Handle both response formats
+      setFormData(data.user || data.profile);
     } catch (error) {
       setMessage({ type: "error", text: "Failed to load profile" });
     } finally {
       setLoading(false);
     }
+  };
+
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) {
+      return null;
+    }
+    // If it's already a full URL (starts with http/https), return as-is
+    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+      return imagePath;
+    }
+    // Otherwise, prepend the backend URL
+    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
+    return `${apiUrl}${imagePath}`;
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = "/assets/logo.png";
   };
 
   const handleInputChange = (e) => {
@@ -92,6 +111,36 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDeleteAccount = async (e) => {
+    e.preventDefault();
+    
+    if (!deletePassword) {
+      setMessage({ type: "error", text: "Please enter your password to confirm deletion" });
+      return;
+    }
+
+    if (!showDeleteConfirm) {
+      setShowDeleteConfirm(true);
+      return;
+    }
+
+    try {
+      await authFetch("/api/profile", {
+        method: "DELETE",
+        body: JSON.stringify({ password: deletePassword })
+      });
+      
+      // Logout and redirect after successful deletion
+      logout();
+      navigate("/");
+      setMessage({ type: "success", text: "Your account has been deleted successfully" });
+    } catch (error) {
+      setMessage({ type: "error", text: error.message || "Failed to delete account" });
+      setShowDeleteConfirm(false);
+      setDeletePassword("");
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -129,9 +178,18 @@ export default function ProfilePage() {
             <div className="bg-white rounded-lg shadow p-6">
               {/* Profile Picture */}
               <div className="flex justify-center mb-6">
-                <div className="w-32 h-32 rounded-full bg-[#001A78] flex items-center justify-center text-white text-4xl font-bold">
-                  {profile.firstName?.[0] || profile.email?.[0] || "?"}
-                </div>
+                {profile.profilePic ? (
+                  <img
+                    src={getImageUrl(profile.profilePic)}
+                    alt={`${profile.firstName || ""} ${profile.lastName || ""}`.trim() || "Profile"}
+                    onError={handleImageError}
+                    className="w-32 h-32 rounded-full object-cover shadow-lg border-4 border-[#001A78]"
+                  />
+                ) : (
+                  <div className="w-32 h-32 rounded-full bg-[#001A78] flex items-center justify-center text-white text-4xl font-bold shadow-lg border-4 border-[#001A78]">
+                    {profile.firstName?.[0] || profile.email?.[0] || "?"}
+                  </div>
+                )}
               </div>
 
               {/* Navigation */}
@@ -159,6 +217,14 @@ export default function ProfilePage() {
                   }`}
                 >
                   Change Password
+                </button>
+                <button
+                  onClick={() => setActiveTab("delete")}
+                  className={`px-4 py-2 rounded text-left transition-colors ${
+                    activeTab === "delete" ? "bg-red-600 text-white font-bold" : "hover:bg-red-50 text-red-600"
+                  }`}
+                >
+                  Delete Account
                 </button>
               </nav>
             </div>
@@ -509,6 +575,85 @@ export default function ProfilePage() {
                     Change Password
                   </button>
                 </form>
+              )}
+
+              {/* Delete Account */}
+              {activeTab === "delete" && (
+                <form onSubmit={handleDeleteAccount} className="space-y-6">
+                  <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <h3 className="text-xl font-semibold text-red-800 mb-2">⚠️ Delete Account</h3>
+                    <p className="text-red-700 mb-4">
+                      This action cannot be undone. Deleting your account will permanently remove:
+                    </p>
+                    <ul className="list-disc list-inside text-red-700 space-y-1 mb-4">
+                      <li>Your profile information</li>
+                      <li>All your blog posts</li>
+                      <li>All your announcements</li>
+                      <li>All associated data</li>
+                    </ul>
+                    <p className="text-red-800 font-semibold">
+                      If you're sure you want to proceed, please enter your password below.
+                    </p>
+                  </div>
+
+                  {showDeleteConfirm && (
+                    <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-4">
+                      <p className="text-yellow-800 font-semibold">
+                        Are you absolutely sure? This action is permanent and irreversible.
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="space-y-4 max-w-md">
+                    <input
+                      type="password"
+                      value={deletePassword}
+                      onChange={(e) => setDeletePassword(e.target.value)}
+                      placeholder="Enter your password to confirm"
+                      required
+                      className="w-full border border-red-300 rounded px-4 py-2 focus:border-red-500 focus:ring-red-500"
+                    />
+                  </div>
+
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      className="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold"
+                    >
+                      {showDeleteConfirm ? "Confirm Delete Account" : "Delete My Account"}
+                    </button>
+                    {showDeleteConfirm && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowDeleteConfirm(false);
+                          setDeletePassword("");
+                        }}
+                        className="px-6 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </form>
+              )}
+
+              {/* Delete Account Button - Only shown on "Delete Account" tab */}
+              {activeTab === "delete" && (
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-red-800 mb-2">Danger Zone</h4>
+                    <p className="text-sm text-red-700 mb-4">
+                      Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button
+                      onClick={() => setActiveTab("delete")}
+                      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold text-sm"
+                    >
+                      Delete My Account
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>

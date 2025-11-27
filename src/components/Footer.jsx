@@ -1,5 +1,5 @@
 import React from "react";
-import { FaInstagram, FaEnvelope, FaFacebook, FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaEnvelope, FaFacebook, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -17,17 +17,14 @@ const Footer = () => {
             it might be faster if you also reach out through Instagram.
           </p>
           <div className="flex gap-4 text-3xl">
-            <a href="mailto:your@email.com" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition">
-              <FaEnvelope />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition">
-              <FaInstagram />
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition">
+            <a href="https://www.facebook.com/amsa.amokh" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition" aria-label="AMSA Facebook">
               <FaFacebook />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition">
-              <FaLinkedin />
+            <a href="https://www.instagram.com/amsa.amokh/" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition" aria-label="AMSA Instagram">
+              <FaInstagram />
+            </a>
+            <a href="https://www.youtube.com/channel/UCd7zhLTluYQkA7SwtHV08rw" target="_blank" rel="noreferrer" className="hover:text-[#FFCA3A] transition" aria-label="AMSA YouTube">
+              <FaYoutube />
             </a>
           </div>
         </div>

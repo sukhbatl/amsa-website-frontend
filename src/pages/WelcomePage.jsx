@@ -39,7 +39,7 @@ const WelcomePage = () => {
             Go to Home
           </Link>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/amsa.amokh/"
             target="_blank"
             rel="noreferrer"
             className="border border-[#001A78] text-[#001A78] px-6 py-3 rounded-lg hover:bg-[#001A78] hover:text-white transition w-full sm:w-auto"
